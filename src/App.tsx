@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 // import './App.css';
 
-function App() {
+const App = ()=> {
+  const [value, setValue] = useState<string>('test');
+  const [isDialog, setDialog] = useState<boolean>(false);
   return (
     <>
+      <_Dialog isDisplay={isDialog}>
+        <dialog>
+          <text></text>
+          <button>キャンセル</button>
+          <button>確定</button>
+        </dialog>
+      </_Dialog>
+
       <_Form>
-        <textarea></textarea>
+        <textarea value={value} onChange={(e)=>{
+          setValue(e.target.value);
+        }} />
       </_Form>
 
       <_Buttons>
-        <button>抽出</button>
+        <button onClick={()=>{
+          setDialog(true);
+        }}>抽出</button>
         <button>リセット</button>
       </_Buttons>
 
@@ -56,5 +70,40 @@ const _Buttons = styled.div`
 
   & button {
     width: 100%;
+  }
+`;
+
+const _Dialog = styled.div<{
+  isDisplay: boolean;
+}>`
+  display: ${props => props.isDisplay?'block':'none'};
+  background-color: #0000007f;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  & dialog {
+    background-color: white;
+    display: inline-block;
+    width: 50%;
+    height: 30%;
+    top: 50%;
+    left: 50%;
+    padding: 2%;
+    transform: translate(-50%,-50%);
+  }
+
+  & text {
+    width: 100%;
+    height: 10%;
+  }
+
+  & button {
+    position: fixed;
+    right: 5px;
+    bottom: 10px;
   }
 `;
