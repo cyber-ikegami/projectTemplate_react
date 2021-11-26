@@ -5,13 +5,26 @@ import styled from 'styled-components';
 const App = ()=> {
   const [value, setValue] = useState<string>('test');
   const [isDialog, setDialog] = useState<boolean>(false);
+  let [printValue, selectValue] = useState<string>();
   return (
     <>
       <_Dialog isDisplay={isDialog}>
         <dialog>
-          <text></text>
-          <button>キャンセル</button>
-          <button>確定</button>
+          <span>■日付</span>
+          <input type="text" />
+          <span>■所属</span>
+          <input type="text" />
+          <span>■名前</span>
+          <input type="text" />
+
+          <button onClick={()=>{
+            setDialog(false);
+          }}>キャンセル</button>
+
+          <button onClick={()=>{
+            setDialog(false);
+
+          }}>確定</button>
         </dialog>
       </_Dialog>
 
@@ -24,12 +37,15 @@ const App = ()=> {
       <_Buttons>
         <button onClick={()=>{
           setDialog(true);
+          //selectValue(window.getSelection()?.toString);
         }}>抽出</button>
         <button>リセット</button>
       </_Buttons>
 
       <_Form>
-        <textarea></textarea>
+        <textarea>
+          
+        </textarea>
       </_Form>
     </>
   );
@@ -84,6 +100,11 @@ const _Dialog = styled.div<{
   top: 0;
   left: 0;
   z-index: 10;
+  //text-align: right;
+
+  & span {
+    font-size: 15px;
+  }
 
   & dialog {
     background-color: white;
@@ -96,14 +117,16 @@ const _Dialog = styled.div<{
     transform: translate(-50%,-50%);
   }
 
-  & text {
+  & input {
     width: 100%;
     height: 10%;
   }
 
   & button {
-    position: fixed;
-    right: 5px;
+    width: 100px;
+    height: 30px;
+    margin-top: 5px;
+    margin-right: 5px;
     bottom: 10px;
   }
 `;
