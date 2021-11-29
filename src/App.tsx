@@ -3,54 +3,88 @@ import styled from 'styled-components';
 // import './App.css';
 
 const App = ()=> {
+  // システム日付を初期値に設定
+	let today = new Date(); 
+	const year = today.getFullYear();
+	const month = today.getMonth()+1;
+	const day = today.getDate();
+
   const [value, setValue] = useState<string>('test');
   const [isDialog, setDialog] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>();
-  const [date, setDate] = useState<string>();
+  const [date, setDate] = useState<string>(year + '/' + month + '/' + day);
   const [affiliation, setAffiliation] = useState<string>();
   const [name, setName] = useState<string>();
-  const [showValue, setShowValue] = useState<string>();
+  const [showValue, setShowValue] = useState<string>('');
 
-  // const handleChange = (e:any) => {
-  //   setDate(() => e.target.value)
-  // }
   return (
     <>
+      {/* ダイアログ */}
       <_Dialog isDisplay={isDialog}>
         <dialog>
+          {/* テキストボックス */}
           <span>■日付</span>
-          <input type="text" value={date} />
+          <input type="text" value={date} onChange={(e)=>{
+            setDate(e.target.value);
+          }}/>
           <span>■所属</span>
-          <input type="text" value={affiliation} />
+          <input type="text" value={affiliation} placeholder="例）CSC" onChange={(e)=>{
+            setAffiliation(e.target.value);
+          }}/>
           <span>■名前</span>
-          <input type="text" value={name} />
+          <input type="text" value={name} placeholder="例）〇〇様" onChange={(e)=>{
+            setName(e.target.value);
+          }}/>
 
-          <button onClick={()=>{
-            setDialog(false);
-          }}>キャンセル</button>
-
+          {/* キャンセルボタン */}
           <button onClick={(e)=>{
             setDialog(false);
-            // setShowValue(e.target.date);
+
+            // 初期化
+            //setDate('');
+            setAffiliation('');
+            setName('');
+          }}>キャンセル</button>
+
+          {/* 確定ボタン */}
+          <button onClick={(e)=>{
+            setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
+            setDialog(false);
+            
+            // 初期化
+            //setDate('');
+            setAffiliation('');
+            setName('');
+
           }}>確定</button>
         </dialog>
       </_Dialog>
 
+      {/* 左エリア */}
       <_Form>
+        {/* 入力テキストエリア */}
         <textarea value={value} onChange={(e)=>{
           setValue(e.target.value);
         }} />
       </_Form>
 
+      {/* 中央エリア */}
       <_Buttons>
+        {/* 抽出ボタン */}
         <button onClick={()=>{
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
         }}>抽出</button>
-        <button>リセット</button>
+
+        {/* リセットボタン */}
+        <button onClick={()=>{
+           setShowValue('');
+        }}>リセット</button>
       </_Buttons>
 
+      {/* 右エリア */}
       <_Form>
+        {/* 出力結果テキストエリア  */}
         <textarea value={showValue}/>
       </_Form>
     </>
