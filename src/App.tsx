@@ -5,25 +5,33 @@ import styled from 'styled-components';
 const App = ()=> {
   const [value, setValue] = useState<string>('test');
   const [isDialog, setDialog] = useState<boolean>(false);
-  let [printValue, selectValue] = useState<string>();
+  const [selectedValue, setSelectedValue] = useState<string>();
+  const [date, setDate] = useState<string>();
+  const [affiliation, setAffiliation] = useState<string>();
+  const [name, setName] = useState<string>();
+  const [showValue, setShowValue] = useState<string>();
+
+  // const handleChange = (e:any) => {
+  //   setDate(() => e.target.value)
+  // }
   return (
     <>
       <_Dialog isDisplay={isDialog}>
         <dialog>
           <span>■日付</span>
-          <input type="text" />
+          <input type="text" value={date} />
           <span>■所属</span>
-          <input type="text" />
+          <input type="text" value={affiliation} />
           <span>■名前</span>
-          <input type="text" />
+          <input type="text" value={name} />
 
           <button onClick={()=>{
             setDialog(false);
           }}>キャンセル</button>
 
-          <button onClick={()=>{
+          <button onClick={(e)=>{
             setDialog(false);
-
+            // setShowValue(e.target.date);
           }}>確定</button>
         </dialog>
       </_Dialog>
@@ -37,15 +45,13 @@ const App = ()=> {
       <_Buttons>
         <button onClick={()=>{
           setDialog(true);
-          //selectValue(window.getSelection()?.toString);
+          setSelectedValue(window.getSelection()?.toString());
         }}>抽出</button>
         <button>リセット</button>
       </_Buttons>
 
       <_Form>
-        <textarea>
-          
-        </textarea>
+        <textarea value={showValue}/>
       </_Form>
     </>
   );
