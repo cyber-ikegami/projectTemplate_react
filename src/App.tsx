@@ -55,7 +55,6 @@ const App = ()=> {
             //setDate('');
             setAffiliation('');
             setName('');
-
           }}>確定</button>
         </dialog>
       </_Dialog>
