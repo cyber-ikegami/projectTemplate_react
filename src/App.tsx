@@ -13,10 +13,11 @@ const App = ()=> {
   const [isDialog, setDialog] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>();
   const [date, setDate] = useState<string>(year + '/' + month + '/' + day);
-  const [affiliation, setAffiliation] = useState<string>();
-  const [name, setName] = useState<string>();
+  const [affiliation, setAffiliation] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const [showValue, setShowValue] = useState<string>('');
-
+  const [dateHistoryList, setDateHistoryList] = useState<string[]>([]);
+  
   return (
     <>
       {/* ダイアログ */}
@@ -24,17 +25,22 @@ const App = ()=> {
         <dialog>
           {/* テキストボックス */}
           <span>■日付</span>
-          <input type="text" value={date} onChange={(e)=>{
+          <input type="text" value={date} list="dateList" onChange={(e)=>{
             setDate(e.target.value);
           }}/>
+          <datalist id="dateList"></datalist>
+
           <span>■所属</span>
-          <input type="text" value={affiliation} placeholder="例）CSC" onChange={(e)=>{
+          <input type="text" value={affiliation} placeholder="例）CSC" list="affiliationList" onChange={(e)=>{
             setAffiliation(e.target.value);
           }}/>
+          <datalist id="affiliationList"></datalist>
+
           <span>■名前</span>
-          <input type="text" value={name} placeholder="例）〇〇様" onChange={(e)=>{
+          <input type="text" value={name} placeholder="例）〇〇様" list="nameList" onChange={(e)=>{
             setName(e.target.value);
           }}/>
+          <datalist id="nameList"></datalist>
 
           {/* キャンセルボタン */}
           <button onClick={(e)=>{
@@ -50,7 +56,14 @@ const App = ()=> {
           <button onClick={(e)=>{
             setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setDialog(false);
+
+            // push
+            // newしなおす
+            // slice
+            dateHistoryList.push(date);
+            setDateHistoryList(dateHistoryList);
             
+
             // 初期化
             //setDate('');
             setAffiliation('');
@@ -74,6 +87,7 @@ const App = ()=> {
         <button onClick={()=>{
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
+          alert(dateHistoryList.length);
         }}>抽出</button>
 
         {/* リセットボタン */}
