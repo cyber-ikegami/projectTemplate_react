@@ -55,6 +55,7 @@ const App = ()=> {
             //setDate('');
             setAffiliation('');
             setName('');
+
           }}>確定</button>
         </dialog>
       </_Dialog>
@@ -104,7 +105,6 @@ const _Form = styled.div`
   vertical-align: top;
   width: calc(50% - 40px);
   height: 100%;
-
   & textarea {
     margin-left: 10px;
     margin-bottom: 10px;
@@ -122,7 +122,6 @@ const _Buttons = styled.div`
   display: inline-flex;
   flex-flow: column;
   justify-content: center;
-
   & button {
     width: 100%;
   }
@@ -140,11 +139,9 @@ const _Dialog = styled.div<{
   left: 0;
   z-index: 10;
   //text-align: right;
-
   & span {
     font-size: 15px;
   }
-
   & dialog {
     background-color: white;
     display: inline-block;
@@ -155,12 +152,10 @@ const _Dialog = styled.div<{
     padding: 2%;
     transform: translate(-50%,-50%);
   }
-
   & input {
     width: 100%;
     height: 10%;
   }
-
   & button {
     width: 100px;
     height: 30px;
