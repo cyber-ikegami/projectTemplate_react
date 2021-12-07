@@ -62,7 +62,13 @@ const App = ()=> {
             // slice
             dateHistoryList.push(date);
             setDateHistoryList(dateHistoryList);
-            
+            const dateOption = document.createElement('option');
+
+            for(let i = 0; i < dateHistoryList.length; i++){
+              dateOption.value = dateHistoryList[i];
+              dateOption.text = dateHistoryList[i];
+              dateList.appendChild(dateOption);
+            }
 
             // 初期化
             //setDate('');
@@ -87,7 +93,7 @@ const App = ()=> {
         <button onClick={()=>{
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
-          alert(dateHistoryList.length);
+          // alert(dateHistoryList.length);
         }}>抽出</button>
 
         {/* リセットボタン */}
