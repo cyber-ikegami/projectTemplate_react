@@ -17,7 +17,33 @@ const App = ()=> {
   const [name, setName] = useState<string>('');
   const [showValue, setShowValue] = useState<string>('');
   const [dateHistoryList, setDateHistoryList] = useState<string[]>([]);
+  const [affiliationHistoryList, setAffiliationHistoryList] = useState<string[]>([]);
+  const [nameHistoryList, setNameHistoryList] = useState<string[]>([]);
+
+  // 日付履歴JSXのリスト
+  const dataHistoryJsxList: JSX.Element[] = [];
+  for(let i = 0; i < dateHistoryList.length; i++){
+    dataHistoryJsxList.push(
+      <option>{dateHistoryList[i]}</option>
+    );
+  }
+
+  // 所属履歴JSXのリスト
+  const affiliationHistoryJsxList: JSX.Element[] = [];
+  for(let i = 0; i < affiliationHistoryList.length; i++){
+    affiliationHistoryJsxList.push(
+      <option>{affiliationHistoryList[i]}</option>
+    );
+  }
   
+  // 名前履歴JSXのリスト
+  const nameHistoryJsxList: JSX.Element[] = [];
+  for(let i = 0; i < nameHistoryList.length; i++){
+    nameHistoryJsxList.push(
+      <option>{nameHistoryList[i]}</option>
+    );
+  }
+
   return (
     <>
       {/* ダイアログ */}
@@ -28,19 +54,19 @@ const App = ()=> {
           <input type="text" value={date} list="dateList" onChange={(e)=>{
             setDate(e.target.value);
           }}/>
-          <datalist id="dateList"></datalist>
+           <datalist id="dateList">{dataHistoryJsxList}</datalist>
 
           <span>■所属</span>
           <input type="text" value={affiliation} placeholder="例）CSC" list="affiliationList" onChange={(e)=>{
             setAffiliation(e.target.value);
           }}/>
-          <datalist id="affiliationList"></datalist>
+          <datalist id="affiliationList">{affiliationHistoryJsxList}</datalist>
 
           <span>■名前</span>
           <input type="text" value={name} placeholder="例）〇〇様" list="nameList" onChange={(e)=>{
             setName(e.target.value);
           }}/>
-          <datalist id="nameList"></datalist>
+          <datalist id="nameList">{nameHistoryJsxList}</datalist>
 
           {/* キャンセルボタン */}
           <button onClick={(e)=>{
@@ -57,21 +83,21 @@ const App = ()=> {
             setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setDialog(false);
 
-            // push
-            // newしなおす
-            // slice
-            dateHistoryList.push(date);
-            setDateHistoryList(dateHistoryList);
-            const dateOption = document.createElement('option');
-
-            for(let i = 0; i < dateHistoryList.length; i++){
-              dateOption.value = dateHistoryList[i];
-              dateOption.text = dateHistoryList[i];
-              dateList.appendChild(dateOption);
+            if(!dateHistoryList.includes(date)){
+              dateHistoryList.push(date);
+              setDateHistoryList(dateHistoryList);
+            }
+            if(!affiliationHistoryList.includes(affiliation)){
+              affiliationHistoryList.push(affiliation);
+              setAffiliationHistoryList(affiliationHistoryList);
+            }
+            if(!nameHistoryList.includes(name)){
+              nameHistoryList.push(name);
+              setNameHistoryList(nameHistoryList);
             }
 
             // 初期化
-            //setDate('');
+            // setDate('');
             setAffiliation('');
             setName('');
           }}>確定</button>
