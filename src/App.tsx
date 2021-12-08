@@ -16,6 +16,7 @@ const App = ()=> {
   const [affiliation, setAffiliation] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [showValue, setShowValue] = useState<string>('');
+  const [previewValue, setPreviewValue] = useState<string>('');
   const [dateHistoryList, setDateHistoryList] = useState<string[]>([]);
   const [affiliationHistoryList, setAffiliationHistoryList] = useState<string[]>([]);
   const [nameHistoryList, setNameHistoryList] = useState<string[]>([]);
@@ -50,20 +51,27 @@ const App = ()=> {
       <_Dialog isDisplay={isDialog}>
         <dialog>
           {/* テキストボックス */}
+          <span>■プレビュー</span>
+          <textarea readOnly value={previewValue} />
+
+          {/* テキストボックス */}
           <span>■日付</span>
           <input type="text" value={date} list="dateList" onChange={(e)=>{
+            setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setDate(e.target.value);
           }}/>
            <datalist id="dateList">{dataHistoryJsxList}</datalist>
 
           <span>■所属</span>
           <input type="text" value={affiliation} placeholder="例）CSC" list="affiliationList" onChange={(e)=>{
+            setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setAffiliation(e.target.value);
           }}/>
           <datalist id="affiliationList">{affiliationHistoryJsxList}</datalist>
 
           <span>■名前</span>
           <input type="text" value={name} placeholder="例）〇〇様" list="nameList" onChange={(e)=>{
+            setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setName(e.target.value);
           }}/>
           <datalist id="nameList">{nameHistoryJsxList}</datalist>
@@ -108,6 +116,7 @@ const App = ()=> {
       {/* 左エリア */}
       <_Form>
         {/* 入力テキストエリア */}
+        <span>　■ベーステキスト</span>
         <textarea value={value} onChange={(e)=>{
           setValue(e.target.value);
         }} />
@@ -119,6 +128,7 @@ const App = ()=> {
         <button onClick={()=>{
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
+          setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
           // alert(dateHistoryList.length);
         }}>抽出</button>
 
@@ -131,6 +141,7 @@ const App = ()=> {
       {/* 右エリア */}
       <_Form>
         {/* 出力結果テキストエリア  */}
+        <span>　■抽出結果</span>
         <textarea value={showValue}/>
       </_Form>
     </>
@@ -152,15 +163,20 @@ const _Form = styled.div`
   width: calc(50% - 40px);
   height: 100%;
   & textarea {
+    resize:none;
     margin-left: 10px;
     margin-bottom: 10px;
     width: calc(100% - 20px);
     height: calc(100% - 30px);
+    box-sizing: border-box; 
+  }
+  & span {
+    font-size: 15px;
   }
 `;
 
 const _Buttons = styled.div`
-  background-color: #eed297;
+  background-color: #b0ee97;
   display: inline-block;
   vertical-align: top;
   width: 80px;
@@ -184,7 +200,6 @@ const _Dialog = styled.div<{
   top: 0;
   left: 0;
   z-index: 10;
-  //text-align: right;
   & span {
     font-size: 15px;
   }
@@ -192,15 +207,20 @@ const _Dialog = styled.div<{
     background-color: white;
     display: inline-block;
     width: 50%;
-    height: 30%;
+    height: 300px;
     top: 50%;
     left: 50%;
     padding: 2%;
     transform: translate(-50%,-50%);
   }
+  & textarea {
+    resize:none;
+    width: 100%;
+    height: 100px;
+  }
   & input {
     width: 100%;
-    height: 10%;
+    height: 20px;
   }
   & button {
     width: 100px;
@@ -209,4 +229,5 @@ const _Dialog = styled.div<{
     margin-right: 5px;
     bottom: 10px;
   }
+  
 `;
