@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 // import './App.css';
 
-const App = ()=> {
-  // システム日付を初期値に設定
-	let today = new Date(); 
-	const year = today.getFullYear();
-	const month = today.getMonth()+1;
-	const day = today.getDate();
+const line = '--------------------------------------------';
 
+const App = ()=> {
   const [value, setValue] = useState<string>('test');
   const [isDialog, setDialog] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>();
-  const [date, setDate] = useState<string>(year + '/' + month + '/' + day);
+  const [date, setDate] = useState<string>(getSystemDate());
   const [affiliation, setAffiliation] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [showValue, setShowValue] = useState<string>('');
@@ -46,12 +42,7 @@ const App = ()=> {
 
   // プレビューに表示する値
   const previewValue =
-  `${date} ${affiliation})${name}
-
-   ${selectedValue}
-
-   --------------------------------------------
-   `.replace(/[ \t\r]+/g,"");
+  `${date} ${affiliation})${name}\n\n${selectedValue}\n${line}\n`;
 
   return (
     <>
@@ -94,13 +85,7 @@ const App = ()=> {
 
           {/* 確定ボタン */}
           <button onClick={(e)=>{
-            setShowValue(
-              `${showValue}${date} ${affiliation})${name}
-              
-              ${selectedValue}
-
-              --------------------------------------------
-              `.replace(/[ \t\r]+/g,""));
+            setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n\n' + selectedValue + '\n' + line + '\n');
             setDialog(false);
 
             if(!dateHistoryList.includes(date)){
@@ -158,6 +143,15 @@ const App = ()=> {
 }
 
 export default App;
+
+// システム日付を初期値に設定
+const getSystemDate = () => {
+  	let today = new Date(); 
+  	const year = today.getFullYear();
+	  const month = today.getMonth()+1;
+  	const day = today.getDate();
+    return year + '/' + month + '/' + day;
+}
 
 const _Test = styled.div`
   color: #ffb700;
