@@ -16,7 +16,6 @@ const App = ()=> {
   const [affiliation, setAffiliation] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [showValue, setShowValue] = useState<string>('');
-  const [previewValue, setPreviewValue] = useState<string>('');
   const [dateHistoryList, setDateHistoryList] = useState<string[]>([]);
   const [affiliationHistoryList, setAffiliationHistoryList] = useState<string[]>([]);
   const [nameHistoryList, setNameHistoryList] = useState<string[]>([]);
@@ -45,6 +44,15 @@ const App = ()=> {
     );
   }
 
+  // プレビューに表示する値
+  const previewValue =
+  `${date} ${affiliation})${name}
+
+   ${selectedValue}
+
+   --------------------------------------------
+   `.replace(/[ \t\r]+/g,"");
+
   return (
     <>
       {/* ダイアログ */}
@@ -53,25 +61,23 @@ const App = ()=> {
           {/* テキストボックス */}
           <span>■プレビュー</span>
           <textarea readOnly value={previewValue} />
+          {/* alert(selectedValue); */}
 
           {/* テキストボックス */}
           <span>■日付</span>
           <input type="text" value={date} list="dateList" onChange={(e)=>{
-            setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setDate(e.target.value);
           }}/>
            <datalist id="dateList">{dataHistoryJsxList}</datalist>
 
           <span>■所属</span>
           <input type="text" value={affiliation} placeholder="例）CSC" list="affiliationList" onChange={(e)=>{
-            setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setAffiliation(e.target.value);
           }}/>
           <datalist id="affiliationList">{affiliationHistoryJsxList}</datalist>
 
           <span>■名前</span>
           <input type="text" value={name} placeholder="例）〇〇様" list="nameList" onChange={(e)=>{
-            setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
             setName(e.target.value);
           }}/>
           <datalist id="nameList">{nameHistoryJsxList}</datalist>
@@ -88,7 +94,13 @@ const App = ()=> {
 
           {/* 確定ボタン */}
           <button onClick={(e)=>{
-            setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
+            setShowValue(
+              `${showValue}${date} ${affiliation})${name}
+              
+              ${selectedValue}
+
+              --------------------------------------------
+              `.replace(/[ \t\r]+/g,""));
             setDialog(false);
 
             if(!dateHistoryList.includes(date)){
@@ -105,7 +117,6 @@ const App = ()=> {
             }
 
             // 初期化
-            // setDate('');
             setAffiliation('');
             setName('');
 
@@ -128,8 +139,7 @@ const App = ()=> {
         <button onClick={()=>{
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
-          setPreviewValue(date + ' ' + affiliation + ')' + name + '\n' + selectedValue + '\n--------------------------------------------\n');
-          // alert(dateHistoryList.length);
+
         }}>抽出</button>
 
         {/* リセットボタン */}
