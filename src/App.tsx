@@ -40,7 +40,7 @@ const App = ()=> {
     );
   }
 
-  // プレビューに表示する値
+  // プレビューに表示する値(所属の入力があれば括弧をつける)
   let previewValue = '';
   if(affiliation != '') {
     previewValue = `${date} ${affiliation})${name}\n\n${selectedValue}\n${line}\n`;
