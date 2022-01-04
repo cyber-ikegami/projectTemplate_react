@@ -41,8 +41,12 @@ const App = ()=> {
   }
 
   // プレビューに表示する値
-  const previewValue =
-  `${date} ${affiliation})${name}\n\n${selectedValue}\n${line}\n`;
+  let previewValue = '';
+  if(affiliation != '') {
+    previewValue = `${date} ${affiliation})${name}\n\n${selectedValue}\n${line}\n`;
+  } else {
+    previewValue = `${date} ${name}\n\n${selectedValue}\n${line}\n`;
+  }
 
   return (
     <>
@@ -85,7 +89,11 @@ const App = ()=> {
 
           {/* 確定ボタン */}
           <button onClick={(e)=>{
-            setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n\n' + selectedValue + '\n' + line + '\n');
+            if(affiliation != '') {
+              setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n\n' + selectedValue + '\n' + line + '\n');
+            } else {
+              setShowValue(showValue + date + ' ' + name + '\n\n' + selectedValue + '\n' + line + '\n');
+            }
             setDialog(false);
 
             if(!dateHistoryList.includes(date)){
