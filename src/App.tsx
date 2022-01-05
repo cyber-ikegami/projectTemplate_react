@@ -89,6 +89,7 @@ const App = ()=> {
 
           {/* 確定ボタン */}
           <button onClick={(e)=>{
+            // 所属の入力があれば括弧をつける
             if(affiliation != '') {
               setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n\n' + selectedValue + '\n' + line + '\n');
             } else {
