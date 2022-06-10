@@ -1,5 +1,6 @@
 {
   "name": "react_test",
+  "homepage": "https://cyber-ikegami.github.io/projectTemplate_react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
