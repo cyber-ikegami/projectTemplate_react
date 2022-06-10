@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// import './App.css';
 
 const line = '--------------------------------------------';
 
 const App = ()=> {
-  const [value, setValue] = useState<string>('test');
+  const [baseValue, setBaseValue] = useState<string>('');
   const [isDialog, setDialog] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>();
   const [date, setDate] = useState<string>(getSystemDate());
@@ -53,12 +52,9 @@ const App = ()=> {
       {/* ダイアログ */}
       <_Dialog isDisplay={isDialog}>
         <dialog>
-          {/* テキストボックス */}
           <span>■プレビュー</span>
           <textarea readOnly value={previewValue} />
-          {/* alert(selectedValue); */}
 
-          {/* テキストボックス */}
           <span>■日付</span>
           <input type="text" value={date} list="dateList" onChange={(e)=>{
             setDate(e.target.value);
@@ -77,17 +73,12 @@ const App = ()=> {
           }}/>
           <datalist id="nameList">{nameHistoryJsxList}</datalist>
 
-          {/* キャンセルボタン */}
           <button onClick={(e)=>{
             setDialog(false);
-
-            // 初期化
-            //setDate('');
             setAffiliation('');
             setName('');
           }}>キャンセル</button>
 
-          {/* 確定ボタン */}
           <button onClick={(e)=>{
             // 所属の入力があれば括弧をつける
             if(affiliation != '') {
@@ -113,29 +104,27 @@ const App = ()=> {
             // 初期化
             setAffiliation('');
             setName('');
+
           }}>確定</button>
         </dialog>
       </_Dialog>
 
       {/* 左エリア */}
       <_Form>
-        {/* 入力テキストエリア */}
         <span>　■ベーステキスト</span>
-        <textarea value={value} onChange={(e)=>{
-          setValue(e.target.value);
+        <textarea value={baseValue} onChange={(e)=>{
+          setBaseValue(e.target.value);
         }} />
       </_Form>
 
       {/* 中央エリア */}
       <_Buttons>
-        {/* 抽出ボタン */}
         <button onClick={()=>{
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
 
         }}>抽出</button>
 
-        {/* リセットボタン */}
         <button onClick={()=>{
            setShowValue('');
         }}>リセット</button>
@@ -143,7 +132,6 @@ const App = ()=> {
 
       {/* 右エリア */}
       <_Form>
-        {/* 出力結果テキストエリア  */}
         <span>　■抽出結果</span>
         <textarea value={showValue}/>
       </_Form>
@@ -161,12 +149,6 @@ const getSystemDate = () => {
   	const day = today.getDate();
     return year + '/' + month + '/' + day;
 }
-
-const _Test = styled.div`
-  color: #ffb700;
-  font-size: 30px;
-  font-weight: 600;
-`;
 
 const _Form = styled.div`
   background-color: #b0ee97;
@@ -198,6 +180,7 @@ const _Buttons = styled.div`
   justify-content: center;
   & button {
     width: 100%;
+    margin-bottom: 20px;
   }
 `;
 
