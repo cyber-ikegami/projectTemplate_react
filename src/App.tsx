@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const line = '--------------------------------------------';
 
-const App = ()=> {
+const App = () => {
   const [baseValue, setBaseValue] = useState<string>('');
   const [isDialog, setDialog] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>();
@@ -17,35 +17,26 @@ const App = ()=> {
 
   // 日付履歴JSXのリスト
   const dataHistoryJsxList: JSX.Element[] = [];
-  for(let i = 0; i < dateHistoryList.length; i++){
-    dataHistoryJsxList.push(
-      <option>{dateHistoryList[i]}</option>
-    );
-  }
+  dateHistoryList.forEach((dateHistory, i) => {
+    dataHistoryJsxList.push(<option key={i}>{dateHistory}</option>);
+  });
 
   // 所属履歴JSXのリスト
   const affiliationHistoryJsxList: JSX.Element[] = [];
-  for(let i = 0; i < affiliationHistoryList.length; i++){
-    affiliationHistoryJsxList.push(
-      <option>{affiliationHistoryList[i]}</option>
-    );
-  }
-  
+  affiliationHistoryList.forEach((affiliationHistory, i) => {
+    affiliationHistoryJsxList.push(<option key={i}>{affiliationHistory}</option>);
+  });
+
   // 名前履歴JSXのリスト
   const nameHistoryJsxList: JSX.Element[] = [];
-  for(let i = 0; i < nameHistoryList.length; i++){
-    nameHistoryJsxList.push(
-      <option>{nameHistoryList[i]}</option>
-    );
-  }
+  nameHistoryList.forEach((nameHistory, i) => {
+    nameHistoryJsxList.push(<option key={i}>{nameHistory}</option>);
+  });
 
   // プレビューに表示する値(所属の入力があれば括弧をつける)
-  let previewValue = '';
-  if(affiliation != '') {
-    previewValue = `${date} ${affiliation})${name}\n\n${selectedValue}\n${line}\n`;
-  } else {
-    previewValue = `${date} ${name}\n\n${selectedValue}\n${line}\n`;
-  }
+  const previewValue = affiliation != '' ?
+    `${date} ${affiliation})${name}\n\n${removeQuoteIndent(selectedValue != undefined ? selectedValue : '')}\n\n${line}\n` :
+    `${date} ${name}\n\n${removeQuoteIndent(selectedValue != undefined ? selectedValue : '')}\n\n${line}\n`;
 
   return (
     <>
@@ -56,47 +47,45 @@ const App = ()=> {
           <textarea readOnly value={previewValue} />
 
           <span>■日付</span>
-          <input type="text" value={date} list="dateList" onChange={(e)=>{
+          <input type="text" value={date} list="dateList" onChange={(e) => {
             setDate(e.target.value);
-          }}/>
-           <datalist id="dateList">{dataHistoryJsxList}</datalist>
+          }} />
+          <datalist id="dateList">{dataHistoryJsxList}</datalist>
 
           <span>■所属</span>
-          <input type="text" value={affiliation} placeholder="例）CSC" list="affiliationList" onChange={(e)=>{
+          <input type="text" value={affiliation} placeholder="例）CSC" list="affiliationList" onChange={(e) => {
             setAffiliation(e.target.value);
-          }}/>
+          }} />
           <datalist id="affiliationList">{affiliationHistoryJsxList}</datalist>
 
           <span>■名前</span>
-          <input type="text" value={name} placeholder="例）〇〇様" list="nameList" onChange={(e)=>{
+          <input type="text" value={name} placeholder="例）〇〇様" list="nameList" onChange={(e) => {
             setName(e.target.value);
-          }}/>
+          }} />
           <datalist id="nameList">{nameHistoryJsxList}</datalist>
 
-          <button onClick={(e)=>{
+          <button onClick={(e) => {
             setDialog(false);
             setAffiliation('');
             setName('');
           }}>キャンセル</button>
 
-          <button onClick={(e)=>{
+          <button onClick={(e) => {
             // 所属の入力があれば括弧をつける
-            if(affiliation != '') {
-              setShowValue(showValue + date + ' ' + affiliation + ')' + name + '\n\n' + selectedValue + '\n' + line + '\n');
-            } else {
-              setShowValue(showValue + date + ' ' + name + '\n\n' + selectedValue + '\n' + line + '\n');
-            }
+            affiliation != '' ?
+              setShowValue(`${showValue}${date} ${affiliation})${name}\n\n${removeQuoteIndent(selectedValue != undefined ? selectedValue : '')}\n\n${line}\n`) :
+              setShowValue(`${showValue}${date} ${name}\n\n${removeQuoteIndent(selectedValue != undefined ? selectedValue : '')}\n\n${line}\n`);
             setDialog(false);
 
-            if(!dateHistoryList.includes(date)){
+            if (!dateHistoryList.includes(date)) {
               dateHistoryList.push(date);
               setDateHistoryList(dateHistoryList);
             }
-            if(!affiliationHistoryList.includes(affiliation)){
+            if (!affiliationHistoryList.includes(affiliation)) {
               affiliationHistoryList.push(affiliation);
               setAffiliationHistoryList(affiliationHistoryList);
             }
-            if(!nameHistoryList.includes(name)){
+            if (!nameHistoryList.includes(name)) {
               nameHistoryList.push(name);
               setNameHistoryList(nameHistoryList);
             }
@@ -112,28 +101,27 @@ const App = ()=> {
       {/* 左エリア */}
       <_Form>
         <span>　■ベーステキスト</span>
-        <textarea value={baseValue} onChange={(e)=>{
+        <textarea value={baseValue} onChange={(e) => {
           setBaseValue(e.target.value);
         }} />
       </_Form>
 
       {/* 中央エリア */}
       <_Buttons>
-        <button onClick={()=>{
+        <button onClick={() => {
           setDialog(true);
           setSelectedValue(window.getSelection()?.toString());
-
         }}>抽出</button>
 
-        <button onClick={()=>{
-           setShowValue('');
+        <button onClick={() => {
+          setShowValue('');
         }}>リセット</button>
       </_Buttons>
 
       {/* 右エリア */}
       <_Form>
         <span>　■抽出結果</span>
-        <textarea value={showValue}/>
+        <textarea value={showValue} onChange={(e) => { }} />
       </_Form>
     </>
   );
@@ -143,12 +131,39 @@ export default App;
 
 // システム日付を初期値に設定
 const getSystemDate = () => {
-  	let today = new Date(); 
-  	const year = today.getFullYear();
-	  const month = today.getMonth()+1;
-  	const day = today.getDate();
-    return year + '/' + month + '/' + day;
+  let today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  return year + '/' + month + '/' + day;
 }
+
+/**
+  * 引用文字「>」によるインデントを削除した文字列を返す
+  * @param original 処理対象の文字列
+  * @returns 処理後の文字列
+  */
+const removeQuoteIndent = (original: string): string => {
+  const records = original.split('\n');
+  let minCount = 0;
+  records.forEach(record => {
+    let i = 0;
+    while (true) {
+      const ch = record.charAt(i);
+      if (ch !== '>') break;
+      i++;
+    }
+    if (minCount == 0 || (i != 0 && i < minCount)) minCount = i;
+  });
+
+  if(minCount == 0) return original;
+
+  const removeStr = (new Array<string>(minCount).fill('>')).join('');
+  records.forEach((record, i) => {
+    records[i] = record.replace(removeStr, '');
+  });
+  return records.join('\r\n');
+};
 
 const _Form = styled.div`
   background-color: #b0ee97;
@@ -187,7 +202,7 @@ const _Buttons = styled.div`
 const _Dialog = styled.div<{
   isDisplay: boolean;
 }>`
-  display: ${props => props.isDisplay?'block':'none'};
+  display: ${props => props.isDisplay ? 'block' : 'none'};
   background-color: #0000007f;
   width: 100%;
   height: 100%;
@@ -224,5 +239,4 @@ const _Dialog = styled.div<{
     margin-right: 5px;
     bottom: 10px;
   }
-  
 `;
